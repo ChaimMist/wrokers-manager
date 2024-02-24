@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
+import {AdminRoutes} from "./routes/admin/adminRoutes";
+import {WorkerRoutes} from "./routes/worker/wrokerRoutes";
 
 function App() {
-  return (
-    <div className="App">
-      Hello world
-    </div>
-  );
+    return (
+      <WorkerRoutes />
+    );
 }
 
 export default App;
