@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -16,7 +14,7 @@ import {BaseLayout} from "../../baseLayout/BaseLayout";
 export const SignUp = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const data: FormData = new FormData(event.currentTarget);
         console.log({
             email: data.get('email'),
             password: data.get('password'),
@@ -95,13 +93,13 @@ export const SignUp = () => {
                         >
                             Sign Up
                         </Button>
-                        <Grid pt={2}  container justifyContent="center">
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                Already have an account? Sign in
-                            </Link>
+                        <Grid pt={2} container justifyContent="center">
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
                     </Box>
                 </Box>
