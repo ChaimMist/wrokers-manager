@@ -3,21 +3,19 @@ import {useNavigate} from "react-router-dom";
 import {ReactJSXElement} from "@emotion/react/types/jsx-namespace";
 
 import {
-    AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Switch, Toolbar, Tooltip, Typography, Stack
+    AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Switch, Toolbar, Tooltip, Typography
 } from "@mui/material";
 
 import {NavBarProps, Page} from "./types";
 import './NavBar.css'
 import MenuIcon from '@mui/icons-material/Menu';
-import SunIcon from '@mui/icons-material/Brightness7';
-import MoonIcon from '@mui/icons-material/DarkMode';
 import profileIcon from '../../../assets/profileImage.png';
 
 
 export const NavBar = ({pages}: NavBarProps) => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-    const [themeCheckBox, setthemeCheckBox] = useState<boolean>(false);
+    const [themeCheckBox, setThemeCheckBox] = useState<boolean>(false);
     const navigation = useNavigate();
 
     const handleNavigation = (link: string) => (): void => {
@@ -32,7 +30,7 @@ export const NavBar = ({pages}: NavBarProps) => {
     };
 
     const handleChangeTheme = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        setthemeCheckBox(!themeCheckBox);
+        setThemeCheckBox(!themeCheckBox);
     };
 
     const getPages = (): ReactJSXElement[] => {
