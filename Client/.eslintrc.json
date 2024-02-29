@@ -33,6 +33,7 @@
     "no-constant-condition": "warn",
     "no-empty": "warn",
     "no-async-promise-executor": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
     "no-prototype-builtins": "warn",
     "no-unreachable": "warn",
     "no-unsafe-negation": "warn",
