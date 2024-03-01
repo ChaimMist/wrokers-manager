@@ -2,8 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "runs the server for workerForce",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
+    "start": "nodemon ./index.ts",
     "start.userService.dev": "nodemon C:/Users/chaim/OneDrive/Desktop/Projects/julius/Server/services/userService/index.ts",
     "start.userService": "tsc && nodemon dist/services/userService/index.js",
     "start.jobService": "tsc && nodemon dist/services/jobService/index.js",

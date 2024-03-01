@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
-import {AdminRoutes} from "./routes/admin/adminRoutes";
-import {WorkerRoutes} from "./routes/worker/wrokerRoutes";
+import {Routes} from "./routes/Routes";
 
 function App() {
     return (
-      <WorkerRoutes />
+      <Routes />
     );
 }
 

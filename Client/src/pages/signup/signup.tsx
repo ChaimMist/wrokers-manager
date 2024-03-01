@@ -1,37 +1,26 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
+import {Link as RouterLink} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {BaseLayout} from "../../baseLayout/BaseLayout";
 import {User} from "../../types/user";
-import {signUp} from "../../api/userService/userServiceApi";
-import {useMutation, UseMutationResult} from "react-query";
+import {UseMutationResult} from "react-query";
 import {CircularProgress} from "@mui/material";
 import {AxiosError} from "axios";
-import {snackBarError, snackBarSuccess} from "../../utils/snackBar/snackBars";
+import {useSignUp} from "../../hooks/mutationHooks";
+import {BaseLayout} from "../../components/baseLayout/BaseLayout";
 import {useNavigate} from "react-router-dom";
 
 
 export const SignUp = () => {
+    const {mutate, isLoading}: UseMutationResult<any, AxiosError, User> = useSignUp()
     const navigate = useNavigate();
-    const {
-        mutate,
-        isLoading,
-    }: UseMutationResult<any, AxiosError, User> = useMutation((user: User) => signUp(user), {
-        onSuccess: () => {
-            snackBarSuccess('User created successfully');
-            navigate('/login');
-        },
-        onError: (error: AxiosError) => snackBarError(error?.response?.data as string)
-    });
-
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
         const formData: FormData = new FormData(event.currentTarget);
@@ -47,7 +36,6 @@ export const SignUp = () => {
     return (
         <BaseLayout>
             <Container component="main" maxWidth="xs">
-                <CssBaseline/>
                 <Box
                     sx={{
                         marginTop: 8,
@@ -118,7 +106,7 @@ export const SignUp = () => {
                         </Button>
                         <Grid pt={2} container justifyContent="center">
                             <Grid item>
-                                <Link variant="body2">
+                                <Link variant="body2" component={RouterLink} to={'/login'}>
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

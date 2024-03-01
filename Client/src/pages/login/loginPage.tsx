@@ -11,12 +11,26 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {BaseLayout} from "../../baseLayout/BaseLayout";
+import {BaseLayout} from "../../components/baseLayout/BaseLayout";
+import {useSignIn} from "../../hooks/mutationHooks";
+import {UseMutationResult} from "react-query";
+import {AxiosError} from "axios";
+import {Credentials} from "../../types/credentials";
+import {CircularProgress} from "@mui/material";
+import {Link as RouterLink} from "react-router-dom";
 
 
 export const LoginPage = () => {
+
+    const {mutate, isLoading}: UseMutationResult<any, AxiosError, Credentials> = useSignIn()
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const formData: FormData = new FormData(event.currentTarget);
+        const credentials: Credentials = {
+            email: formData.get('email') as string,
+            password: formData.get('password') as string
+        }
+        mutate(credentials);
     };
 
     return (
@@ -31,9 +45,10 @@ export const LoginPage = () => {
                         alignItems: 'center',
                     }}
                     >
-                        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                            <LockOutlinedIcon/>
-                        </Avatar>
+                        {isLoading ? <CircularProgress color={'primary'}/> :
+                            <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                                <LockOutlinedIcon/>
+                            </Avatar>}
                         <Typography component={"h1"} variant={"h5"}>
                             Sign in
                         </Typography>
@@ -77,7 +92,7 @@ export const LoginPage = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item>
-                                    <Link variant={"body2"}>
+                                    <Link variant={"body2"} component={RouterLink} to={'/signup'}>
                                         {"Don't have an account? Sign Up"}
                                     </Link>
                                 </Grid>

@@ -1,8 +1,8 @@
 import {Credentials} from "./credentials";
 
-export interface User extends Credentials {
+export interface User extends Credentials{
     firstName: string;
     lastName: string;
-    id?: string;
-    admin?: boolean;
+    admin: boolean;
+    _id: string;
 }
