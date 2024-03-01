@@ -15,7 +15,7 @@ import {signUp} from "../../api/userService/userServiceApi";
 import {useMutation, UseMutationResult} from "react-query";
 import {CircularProgress} from "@mui/material";
 import {AxiosError} from "axios";
-import {snackBarError, snackBarSuccess} from "../../components/snackBar/snackBars";
+import {snackBarError, snackBarSuccess} from "../../utils/snackBar/snackBars";
 import {useNavigate} from "react-router-dom";
 
 
