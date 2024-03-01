@@ -12,8 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServiceBl = void 0;
 const dbAccess_1 = require("../../../utils/DbAccess/dbAccess");
 const mongodb_1 = require("mongodb");
-const queryHandler_1 = require("./queryHandler");
+const schemas_1 = require("../schemas/schemas");
 class UserServiceBl {
+    static translateError(message) {
+        if (message.includes('email_1 dup key')) {
+            return ('User already exists');
+        }
+        return message;
+    }
     static getUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -28,7 +34,18 @@ class UserServiceBl {
     static getUserById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield dbAccess_1.DBAccess.selectOne('Users', queryHandler_1.QueryHandler.getUserByIdQuery(userId));
+                return yield dbAccess_1.DBAccess.selectOne('Users', { _id: new mongodb_1.ObjectId(userId) });
+            }
+            catch (e) {
+                console.error(e);
+                throw e;
+            }
+        });
+    }
+    static updateUser(userId, user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield dbAccess_1.DBAccess.upsert('Users', { _id: new mongodb_1.ObjectId(userId) }, { $set: user });
             }
             catch (e) {
                 console.error(e);
@@ -38,24 +55,11 @@ class UserServiceBl {
     }
     static insertUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield dbAccess_1.DBAccess.upsert('Users', queryHandler_1.QueryHandler.createUserQuery(user), { $set: user });
+            const validation = schemas_1.userSchemas.validate(user);
+            if (validation.error) {
+                throw validation.error;
             }
-            catch (e) {
-                console.error(e);
-                throw e;
-            }
-        });
-    }
-    static updateUser(user) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield dbAccess_1.DBAccess.upsert('Users', queryHandler_1.QueryHandler.updateUserQuery(user), { $set: user });
-            }
-            catch (e) {
-                console.error(e);
-                throw e;
-            }
+            yield dbAccess_1.DBAccess.upsert('Users', { _id: new mongodb_1.ObjectId(user._id) }, { $set: user });
         });
     }
     static deleteUser(userId) {

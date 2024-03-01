@@ -10,15 +10,38 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {BaseLayout} from "../../baseLayout/BaseLayout";
+import {User} from "../../types/user";
+import {signUp} from "../../api/userService/userServiceApi";
+import {useMutation, UseMutationResult} from "react-query";
+import {CircularProgress} from "@mui/material";
+import {AxiosError} from "axios";
+import {snackBarError, snackBarSuccess} from "../../utils/snackBar/snackBars";
+import {useNavigate} from "react-router-dom";
+
 
 export const SignUp = () => {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+    const {
+        mutate,
+        isLoading,
+    }: UseMutationResult<any, AxiosError, User> = useMutation((user: User) => signUp(user), {
+        onSuccess: () => {
+            snackBarSuccess('User created successfully');
+            navigate('/login');
+        },
+        onError: (error: AxiosError) => snackBarError(error?.response?.data as string)
+    });
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
-        const data: FormData = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const formData: FormData = new FormData(event.currentTarget);
+        const user: User = {
+            firstName: formData.get('firstName') as string,
+            lastName: formData.get('lastName') as string,
+            email: formData.get('email') as string,
+            password: formData.get('password') as string,
+        };
+        mutate(user);
     };
 
     return (
@@ -33,13 +56,14 @@ export const SignUp = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
+                    {isLoading ? <CircularProgress color={'primary'}/> :
+                        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                            <LockOutlinedIcon/>
+                        </Avatar>}
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{mt: 3}}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -84,7 +108,6 @@ export const SignUp = () => {
                                 />
                             </Grid>
                         </Grid>
-
                         <Button
                             type="submit"
                             fullWidth
@@ -95,12 +118,11 @@ export const SignUp = () => {
                         </Button>
                         <Grid pt={2} container justifyContent="center">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
                         </Grid>
-
                     </Box>
                 </Box>
             </Container>

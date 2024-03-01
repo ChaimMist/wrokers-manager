@@ -4,10 +4,12 @@
   "description": "runs the server for workerForce",
   "main": "index.js",
   "scripts": {
-    "start.userService": "tsc && node dist/services/userService/index.js",
+    "start.userService.dev": "nodemon C:/Users/chaim/OneDrive/Desktop/Projects/julius/Server/services/userService/index.ts",
+    "start.userService": "tsc && nodemon dist/services/userService/index.js",
+    "start.jobService": "tsc && nodemon dist/services/jobService/index.js",
     "build": "tsc"
   },
-  "author": "",
+  "author": "Chaim",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
