@@ -1,7 +1,13 @@
-import {BaseLayout} from "../../baseLayout/BaseLayout";
+import {BaseLayout} from "../../components/baseLayout/BaseLayout";
+import Box from "@mui/material/Box";
 
 export const HomePage = () => {
     return (
-        <BaseLayout><h1> Home </h1></BaseLayout>
+        <BaseLayout>
+            <Box>
+                <h1>Home</h1>
+                <p>Welcome to the home page</p>
+            </Box>
+        </BaseLayout>
     )
 }

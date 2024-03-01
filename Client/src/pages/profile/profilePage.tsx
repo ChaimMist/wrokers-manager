@@ -1,4 +1,4 @@
-import {BaseLayout} from "../../baseLayout/BaseLayout";
+import {BaseLayout} from "../../components/baseLayout/BaseLayout";
 
 export const ProfilePage = () => {
     return (
