@@ -1,49 +1,43 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {ReactJSXElement} from "@emotion/react/types/jsx-namespace";
+import {MouseEvent, useContext, useState} from "react";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 import {
-    AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography
+    AppBar, Avatar, Box, Button, Container, IconButton, MenuItem, Toolbar, Tooltip, Typography
 } from "@mui/material";
-
-import {NavBarProps, Page} from "./types";
+import {NavBarProps} from "./types";
+import {Page} from "../../types";
 import './NavBar.css'
 import MenuIcon from '@mui/icons-material/Menu';
-import profileIcon from '../../../../assets/profileImage.png'
-
+// import profileIcon from '../../../../assets/profileImage.png'
+import {ThemeContext} from "../../../../contexts/themeContext/themeContext";
+import {darkTheme, lightTheme} from "../../../../themes/themes";
+import {CustomMenu} from "../../../menu/CustomMenu";
+import {UserContext} from "../../../../contexts/userContext/userContext";
+import {UserContextTypes} from "../../../../types/userContextTypes";
 
 export const NavBar = ({pages}: NavBarProps) => {
+    const navigation:NavigateFunction = useNavigate();
+    const {setTheme} = useContext(ThemeContext);
+    const {dispatch} = useContext(UserContext) as UserContextTypes;
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-    const [themeCheckBox, setThemeCheckBox] = useState<boolean>(false);
-    const navigation = useNavigate();
+    const [anchorElTheme, setAnchorElTheme] = useState<null | HTMLElement>(null);
 
     const handleNavigation = (link: string) => (): void => {
         navigation(link);
+    };
+    const handleLogOut = () => (): void => {
+        dispatch({type: 'UPDATE_USER', payload: null});
+        navigation('/login');
     }
-
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>): void => {
+    const handleOpenNavMenu = (event: MouseEvent<HTMLElement>): void => {
         setAnchorElNav(event.currentTarget as HTMLElement);
     };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
+    const handleOpenUserMenu = (event: MouseEvent<HTMLElement>): void => {
         setAnchorElUser(event.currentTarget as HTMLElement);
     };
-
-    const handleChangeTheme = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        setThemeCheckBox(!themeCheckBox);
-    };
-
-    const getPages = (): ReactJSXElement[] => {
-        return pages.map((page: Page) => (
-            <Button
-                key={page.title}
-                onClick={handleNavigation(page.link)}
-                sx={{my: 2, color: 'white', display: 'block', fontFamily: 'sans-serif', fontSize: '1.2rem'}}
-            >
-                {page.title}
-            </Button>
-        ))
+    const handleOpenThemeMenu = (event: MouseEvent<HTMLElement>): void => {
+        setAnchorElTheme(event.currentTarget as HTMLElement);
     }
-
 
     return (
         <AppBar position={'sticky'}>
@@ -56,58 +50,58 @@ export const NavBar = ({pages}: NavBarProps) => {
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
-                                onClick={handleOpenNavMenu}
                                 color="inherit"
+                                onClick={handleOpenNavMenu}
                             >
                                 <MenuIcon/>
                             </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorElNav}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={Boolean(anchorElNav)}
-                                onClose={() => setAnchorElNav(null)}
-                                sx={{
-                                    display: {xs: 'block', md: 'none'},
-                                }}
-                            >
-                                {pages.map((page) => (
+                            <CustomMenu anchorEl={anchorElNav} setAnchorEl={setAnchorElNav}
+                                        sx={{display: {xs: 'block', md: 'none'}}}>
+                                {pages.map((page: Page) => (
                                     <MenuItem key={page.title} onClick={handleNavigation(page.link)}>
                                         <Typography textAlign="center">{page.title}</Typography>
                                     </MenuItem>
                                 ))}
-                            </Menu>
+                            </CustomMenu>
                         </Box>
                         <Typography variant={"h4"} align={'center'} fontFamily={"fantasy"}>
                             Julius
                         </Typography>
                         <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                            {getPages()}
+                            {pages.map((page: Page) => (
+                                <Button
+                                    key={page.title}
+                                    onClick={handleNavigation(page.link)}
+                                    sx={{
+                                        my: 2,
+                                        color: 'white',
+                                        display: 'block',
+                                        fontFamily: 'sans-serif',
+                                        fontSize: '1.2rem'
+                                    }}
+                                >
+                                    {page.title}
+                                </Button>
+                            ))}
                         </Box>
                     </Box>
-                    <Box className={'d-flex flex-row' }>
-                        {/*<Stack direction={"row"} spacing={0}>*/}
-                        {/*    <SunIcon/>*/}
-                        {/*    <Switch color={"secondary"} checked={themeCheckBox} onChange={handleChangeTheme}*/}
-                        {/*            name="gilad"/>*/}
-                        {/*    <MoonIcon/>*/}
-                        {/*</Stack>*/}
+                    <Box className={'d-flex flex-row'}>
                         <Tooltip title="Open settings">
-                            <IconButton size={'large'} sx={{p: 0}}>
-                                <Avatar alt={'awdaw'} src={profileIcon}/>
+                            <IconButton size={'large'} sx={{p: 0}} onClick={handleOpenUserMenu}>
+                                <Avatar alt={'avatar'} />
                             </IconButton>
                         </Tooltip>
+                        <CustomMenu anchorEl={anchorElUser} setAnchorEl={setAnchorElUser}>
+                            <MenuItem onClick={handleOpenThemeMenu}>Change Theme</MenuItem>
+                            <MenuItem onClick={handleLogOut()}>Logout</MenuItem>
+                            <CustomMenu anchorEl={anchorElTheme} setAnchorEl={setAnchorElTheme}>
+                                <MenuItem onClick={() => setTheme(darkTheme)}>Dark Mode </MenuItem>
+                                <MenuItem onClick={() => setTheme(lightTheme)}>Light Mode </MenuItem>
+                            </CustomMenu>
+                        </CustomMenu>
                     </Box>
                 </Toolbar>
             </Container>
         </AppBar>
-    )
+    );
 }

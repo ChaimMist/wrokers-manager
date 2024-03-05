@@ -2,5 +2,9 @@ import {ReactNode} from "react";
 
 export interface BaseLayoutProps {
     children: ReactNode,
-    admin?: boolean
+}
+
+export interface Page {
+    title: string;
+    link: string;
 }

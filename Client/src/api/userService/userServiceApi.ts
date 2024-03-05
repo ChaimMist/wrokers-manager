@@ -10,7 +10,7 @@ export const signUp = async (user: User): Promise<string> => {
         return await axiosInstance.post('/signUp', {user});
 }
 
-export const signIn = async (credentials: Credentials): Promise<string> => {
-        return await axiosInstance.post('/signIn', {credentials});
+export const signIn = async (credentials: Credentials): Promise<User> => {
+        return (await axiosInstance.post('/signIn', {credentials})).data;
 }
 
