@@ -1,25 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import {ThemeProvider} from "@mui/material";
-import {lightTheme} from "./themes/themes";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {SnackbarProvider} from "notistack";
 import CssBaseline from "@mui/material/CssBaseline";
+import UserProvider from "./contexts/userContext/userContext";
+import {ThemeStateProvider} from './contexts/themeContext/themeContext';
 
-const root = ReactDOM.createRoot(
+const root: ReactDOM.Root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 const queryClient: QueryClient = new QueryClient();
-
 root.render(
-    <ThemeProvider theme={lightTheme}>
-        <QueryClientProvider client={queryClient}>
-            <SnackbarProvider maxSnack={3}>
-                <CssBaseline/>
-                <App/>
-            </SnackbarProvider>
-        </QueryClientProvider>
-    </ThemeProvider>
+    <UserProvider>
+        <ThemeStateProvider>
+            <QueryClientProvider client={queryClient}>
+                <SnackbarProvider maxSnack={3}>
+                    <CssBaseline/>
+                    <App/>
+                </SnackbarProvider>
+            </QueryClientProvider>
+        </ThemeStateProvider>
+    </UserProvider>
 );
 

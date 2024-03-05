@@ -20,7 +20,6 @@ import {useNavigate} from "react-router-dom";
 
 export const SignUp = () => {
     const {mutate, isLoading}: UseMutationResult<any, AxiosError, User> = useSignUp()
-    const navigate = useNavigate();
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
         const formData: FormData = new FormData(event.currentTarget);

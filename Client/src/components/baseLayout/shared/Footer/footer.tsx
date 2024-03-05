@@ -17,7 +17,7 @@ export const Footer = () => {
             }}>
             <Container maxWidth="sm">
                 <Typography variant="body1">
-                    Efficiency through Unity: Building Tomorrows Success Together
+                    Efficiency through Unity - Building Tomorrows Success Together
                 </Typography>
                 <Copyright />
             </Container>

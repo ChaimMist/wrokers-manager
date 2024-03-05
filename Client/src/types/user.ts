@@ -3,6 +3,7 @@ import {Credentials} from "./credentials";
 export interface User extends Credentials {
     firstName: string;
     lastName: string;
-    id?: string;
+    _id?: string;
     admin?: boolean;
+    image?: string;
 }

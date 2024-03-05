@@ -8,3 +8,15 @@ body {
     height: fit-content;
     min-height: 100vh;
 }
+.justify-content-center {
+    justify-content: center;
+}
+
+.border-radius-bottom{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.d-flex{
+    display: flex;
+}

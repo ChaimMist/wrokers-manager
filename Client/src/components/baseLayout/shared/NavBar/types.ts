@@ -1,8 +1,6 @@
+import {Page} from "../../types";
+
 export interface NavBarProps {
     pages: Page[];
 }
 
-export interface Page {
-    title: string;
-    link: string;
-}

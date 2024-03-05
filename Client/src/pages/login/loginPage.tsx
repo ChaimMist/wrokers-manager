@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useContext, useEffect} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,11 +19,14 @@ import {AxiosError} from "axios";
 import {Credentials} from "../../types/credentials";
 import {CircularProgress} from "@mui/material";
 import {Link as RouterLink} from "react-router-dom";
+import {UserContext} from "../../contexts/userContext/userContext";
+import {UserContextTypes} from "../../types/userContextTypes";
 
 
 export const LoginPage = () => {
 
-    const {mutate, isLoading}: UseMutationResult<any, AxiosError, Credentials> = useSignIn()
+    const {mutate, isLoading}: UseMutationResult<any, AxiosError, Credentials> = useSignIn();
+    const {user, dispatch} = useContext(UserContext) as UserContextTypes;
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData: FormData = new FormData(event.currentTarget);
@@ -33,11 +37,16 @@ export const LoginPage = () => {
         mutate(credentials);
     };
 
+    useEffect(() => {
+        if (user) {
+            dispatch({type: 'UPDATE_USER', payload: null});
+        }
+    })
+
     return (
         <BaseLayout>
-            <Container className={"shadow"}>
+            <Container>
                 <Container component={"main"} maxWidth={"xs"}>
-                    <CssBaseline/>
                     <Box sx={{
                         marginTop: 8,
                         display: 'flex',
@@ -50,9 +59,9 @@ export const LoginPage = () => {
                                 <LockOutlinedIcon/>
                             </Avatar>}
                         <Typography component={"h1"} variant={"h5"}>
-                            Sign in
+                            Log in
                         </Typography>
-                        <Box component={"form"} onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                        <Box component={"form"} onSubmit={handleSubmit} sx={{mt: 1}}>
                             <TextField
                                 margin={"normal"}
                                 required

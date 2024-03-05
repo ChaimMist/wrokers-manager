@@ -53,14 +53,13 @@ export class BusinessLogic {
             res.status(442).send(validation.error.message);
             return;
         }
-
         try {
             const user: User = await DBAccess.selectOne('Users', {
                 email: credentials.email,
                 password: credentials.password
             });
             if (user) {
-                res.status(200).send('Login successful');
+                res.status(200).send(user);
             } else {
                 res.status(401).send('email or password is incorrect');
             }
@@ -68,20 +67,20 @@ export class BusinessLogic {
             res.status(500).send(e.message);
         }
     }
-
     static async insertUser(req: Request, res: Response): Promise<void> {
         const user: User = req.body.user;
         const validation: Joi.ValidationResult = userSchemas.validate(user);
         if (validation.error) {
             res.status(442).send(validation.error.message);
+            return;
         }
         try {
-            await DBAccess.upsert('Users', {
+            await DBAccess.insertOne('Users', {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
                 password: user.password
-            }, {$set: user});
+            });
             res.status(200).send('User created successfully');
         } catch (e: any) {
             res.status(500).send(BusinessLogic.translateError(e.message));

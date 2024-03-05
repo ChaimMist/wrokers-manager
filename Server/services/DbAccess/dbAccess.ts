@@ -27,6 +27,10 @@ export class DBAccess {
             , {upsert: true});
     }
 
+    static async insertOne(collection: string, query: any): Promise<any> {
+        return await DBAccess.client.db('WorkerForce').collection(collection).insertOne(query);
+    }
+
     static async deleteOne(collection: string, query: any): Promise<any> {
         return await DBAccess.client.db('WorkerForce').collection(collection).deleteOne(query);
     }
