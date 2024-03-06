@@ -7,11 +7,11 @@ import {UserContextTypes} from "../../types/userContextTypes";
 export const HomePage = () => {
     const {user} = useContext(UserContext) as UserContextTypes;
     return (
-        <BaseLayout>
-            <Box>
-                <h1>Home Page</h1>
-                <h2>Welcome, {user?.firstName}</h2>
-            </Box>
-        </BaseLayout>
+            <BaseLayout>
+                <Box>
+                    <h1>Home Page</h1>
+                    <h2>Welcome, {user?.firstName}</h2>
+                </Box>
+            </BaseLayout>
     )
 }

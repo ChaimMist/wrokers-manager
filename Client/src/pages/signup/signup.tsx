@@ -13,7 +13,7 @@ import {User} from "../../types/user";
 import {UseMutationResult} from "react-query";
 import {CircularProgress} from "@mui/material";
 import {AxiosError} from "axios";
-import {useSignUp} from "../../hooks/mutationHooks";
+import {useSignUp} from "../../hooks/useSignUp";
 import {BaseLayout} from "../../components/baseLayout/BaseLayout";
 import {useNavigate} from "react-router-dom";
 

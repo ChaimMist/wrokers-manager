@@ -14,7 +14,7 @@ export class AppServer {
     }
 
     static initRoutes(): void {
-        this.app.use('/user', getUserRouter());
+        this.app.use('/users', getUserRouter());
     }
 
     static serverListen(port: number): void {

@@ -8,6 +8,6 @@ export const userSchemas: joi.ObjectSchema = joi.object({
 });
 
 export const credentialsSchema: joi.ObjectSchema = joi.object({
-    email: joi.string().email().required().email(),
+    email: joi.string().email().required(),
     password: joi.string().required()
 });

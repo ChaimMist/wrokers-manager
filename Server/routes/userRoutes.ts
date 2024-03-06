@@ -4,8 +4,9 @@ import {BusinessLogic} from "../controller/businessLogic";
 
 export const getUserRouter = (): Router => {
     const router: Router = express.Router();
-    router.get('/', BusinessLogic.getUsers);
-    router.get(':userId', BusinessLogic.getUserById);
+    router.get('/getUsers', BusinessLogic.getUsers);
+    router.get('/getUser', BusinessLogic.getUser);
+    router.get('/getUserById', BusinessLogic.getUserById);
     router.post('/signUp', BusinessLogic.insertUser);
     router.post('/signIn', BusinessLogic.signIn);
     router.post('/updateUser', BusinessLogic.updateUser);

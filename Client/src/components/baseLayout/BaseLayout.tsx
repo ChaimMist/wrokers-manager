@@ -12,6 +12,8 @@ import {Theme, useTheme} from "@mui/material";
 export const BaseLayout = ({children}: BaseLayoutProps) => {
     const {user} = useContext(UserContext) as UserContextTypes;
     const theme:Theme = useTheme();
+
+
     const userPages: Page[] = [
         {title: 'Home', link: '/home'},
         {title: 'Profile', link: '/profile'},
