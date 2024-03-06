@@ -33,7 +33,6 @@ export const SignUp = () => {
     };
 
     return (
-        <BaseLayout>
             <Container component="main" maxWidth="xs">
                 <Box
                     sx={{
@@ -113,6 +112,5 @@ export const SignUp = () => {
                     </Box>
                 </Box>
             </Container>
-        </BaseLayout>
     );
 }

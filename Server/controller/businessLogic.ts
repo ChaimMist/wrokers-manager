@@ -25,13 +25,19 @@ export class BusinessLogic {
             res.status(500).send(e.message);
         }
     }
+
     static async getUser(req: Request, res: Response): Promise<void> {
-        console.log(req.headers.token);
-        try {
-            const users: User[] = await DBAccess.selectMany('Users', {});
-            res.status(200).send(users);
-        } catch (e: any) {
-            res.status(500).send(e.message);
+        const token: string = req.headers.token as string;
+        if (!Auth.isTokenExpired(token)) {
+            const decoded: any = Auth.decodeToken(token);
+            console.log(decoded);
+            try {
+                const users: User[] = await DBAccess.selectOne('Users', {});
+                res.status(200).send(users);
+            } catch (e: any) {
+                res.status(500).send(e.message);
+            }
+            res.status(401).send('token expired');
         }
     }
 

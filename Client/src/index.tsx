@@ -12,15 +12,15 @@ const root: ReactDOM.Root = ReactDOM.createRoot(
 );
 const queryClient: QueryClient = new QueryClient();
 root.render(
-    <UserProvider>
-        <ThemeStateProvider>
-            <QueryClientProvider client={queryClient}>
-                <SnackbarProvider maxSnack={3}>
-                    <CssBaseline/>
+    <ThemeStateProvider>
+        <QueryClientProvider client={queryClient}>
+            <SnackbarProvider maxSnack={3}>
+                <CssBaseline/>
+                <UserProvider>
                     <App/>
-                </SnackbarProvider>
-            </QueryClientProvider>
-        </ThemeStateProvider>
-    </UserProvider>
+                </UserProvider>
+            </SnackbarProvider>
+        </QueryClientProvider>
+    </ThemeStateProvider>
 );
 

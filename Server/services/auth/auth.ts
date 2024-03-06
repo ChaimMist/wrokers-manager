@@ -5,31 +5,21 @@ dotenv.config();
 
 export class Auth {
 
-    static isAuthorized(token: string): boolean{
-        return this.isTokenValid(token) && !this.isTokenExpired(token);
-    }
-
     static isAdmin(token: string): boolean{
-        const decoded: any = this.decodeToken(token);
-        console.log(decoded)
-        return decoded.user.admin;
+        try {
+            const decoded: any = this.decodeToken(token);
+            return decoded.user.admin;
+        } catch (e) {
+            return false;
+        }
     }
 
     static createToken(user:User): string{
         return jwt.sign({user}, process.env.JWT_SECRET as string, {expiresIn: '3m'});
     }
 
-    static decodeToken(token: string): any{
+    static decodeToken(token: string): string | jwt.JwtPayload | Error{
         return jwt.verify(token, process.env.JWT_SECRET as string);
-    }
-
-    static isTokenValid(token: string): boolean{
-        try{
-            jwt.verify(token, process.env.JWT_SECRET as string);
-            return true;
-        }catch (e){
-            return false;
-        }
     }
 
     static isTokenExpired(token: string): boolean{
