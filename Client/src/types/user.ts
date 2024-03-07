@@ -6,4 +6,5 @@ export interface User extends Credentials {
     _id?: string;
     admin?: boolean;
     image?: string;
+    token?: string;
 }

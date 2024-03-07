@@ -5,9 +5,12 @@ import {Request, Response} from "express";
 import {Credentials} from "../types/credentials";
 import {User} from "../types/user";
 import {credentialsSchema, userSchemas} from "../schemas/userSchemas";
+import {Auth} from "../services/auth/auth";
+import jwt from "jsonwebtoken";
 
 
 export class BusinessLogic {
+    static privateKey: string = process.env.JWT_SECRET as string;
 
     static translateError(message: string): string {
         if (message.includes('email_1 dup key')) {
@@ -22,6 +25,22 @@ export class BusinessLogic {
             res.status(200).send(users);
         } catch (e: any) {
             res.status(500).send(e.message);
+        }
+    }
+
+    static async getUser(token: string): Promise<User> {
+        const decoded: any = jwt.verify(token, BusinessLogic.privateKey);
+        if (!decoded) {
+            throw {status: 401, message: 'Unauthorized'};
+        }
+        const user: User = await DBAccess.selectOne('Users', {
+            email: decoded.user.email,
+            password: decoded.user.password
+        });
+        if (user) {
+            return user
+        } else {
+            throw {status: 404, message: 'User not found'};
         }
     }
 
@@ -59,6 +78,7 @@ export class BusinessLogic {
                 password: credentials.password
             });
             if (user) {
+                user.token = Auth.createToken(user);
                 res.status(200).send(user);
             } else {
                 res.status(401).send('email or password is incorrect');
@@ -67,6 +87,7 @@ export class BusinessLogic {
             res.status(500).send(e.message);
         }
     }
+
     static async insertUser(req: Request, res: Response): Promise<void> {
         const user: User = req.body.user;
         const validation: Joi.ValidationResult = userSchemas.validate(user);
@@ -89,11 +110,15 @@ export class BusinessLogic {
 
     static async deleteUser(req: Request, res: Response): Promise<void> {
         const userId: string = req.body.data;
+        const token: string = req.body.token;
+        if (!Auth.isAdmin(token)) {
+            res.status(401).send('Unauthorized');
+            return;
+        }
         try {
             await DBAccess.deleteOne('Users', {_id: new ObjectId(userId)});
-        } catch (e) {
-            console.error(e);
-            throw e;
+        } catch (e: any) {
+            res.status(500).send(e.message);
         }
     }
 

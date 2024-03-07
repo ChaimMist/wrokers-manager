@@ -1,21 +1,29 @@
 import {MouseEvent, useContext, useState} from "react";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {
-    AppBar, Avatar, Box, Button, Container, IconButton, MenuItem, Toolbar, Tooltip, Typography
+    AppBar,
+    Avatar,
+    Box,
+    Button,
+    Container,
+    IconButton,
+    MenuItem,
+    Toolbar,
+    Tooltip,
+    Typography
 } from "@mui/material";
-import {NavBarProps} from "./types";
 import {Page} from "../../types";
 import './NavBar.css'
 import MenuIcon from '@mui/icons-material/Menu';
-// import profileIcon from '../../../../assets/profileImage.png'
 import {ThemeContext} from "../../../../contexts/themeContext/themeContext";
 import {darkTheme, lightTheme} from "../../../../themes/themes";
 import {CustomMenu} from "../../../menu/CustomMenu";
 import {UserContext} from "../../../../contexts/userContext/userContext";
 import {UserContextTypes} from "../../../../types/userContextTypes";
+import {NavBarProps} from "./types";
 
 export const NavBar = ({pages}: NavBarProps) => {
-    const navigation:NavigateFunction = useNavigate();
+    const navigation: NavigateFunction = useNavigate();
     const {setTheme} = useContext(ThemeContext);
     const {dispatch} = useContext(UserContext) as UserContextTypes;
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -88,7 +96,7 @@ export const NavBar = ({pages}: NavBarProps) => {
                     <Box className={'d-flex flex-row'}>
                         <Tooltip title="Open settings">
                             <IconButton size={'large'} sx={{p: 0}} onClick={handleOpenUserMenu}>
-                                <Avatar alt={'avatar'} />
+                                <Avatar alt={'avatar'}/>
                             </IconButton>
                         </Tooltip>
                         <CustomMenu anchorEl={anchorElUser} setAnchorEl={setAnchorElUser}>
