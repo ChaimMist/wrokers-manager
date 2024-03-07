@@ -13,11 +13,7 @@ export const useGetUser = () => {
     }, {
         enabled: false,
         onSuccess: (res: User): void => {
-            console.log(res)
             dispatch({type: 'UPDATE_USER', payload: res});
-        },
-        onError: (): void => {
-            throw new Error('User not found');
         }
     });
 }

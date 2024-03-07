@@ -28,16 +28,12 @@ export class BusinessLogic {
 
     static async getUser(req: Request, res: Response): Promise<void> {
         const token: string = req.headers.token as string;
-        if (!Auth.isTokenExpired(token)) {
+        try {
             const decoded: any = Auth.decodeToken(token);
-            console.log(decoded);
-            try {
-                const users: User[] = await DBAccess.selectOne('Users', {});
-                res.status(200).send(users);
-            } catch (e: any) {
-                res.status(500).send(e.message);
-            }
-            res.status(401).send('token expired');
+            const users: User[] = await DBAccess.selectOne('Users', {});
+            res.status(200).send(users);
+        } catch (e: any) {
+            res.status(500).send(e.message);
         }
     }
 

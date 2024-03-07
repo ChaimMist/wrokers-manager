@@ -18,9 +18,9 @@ export const Routes = () => {
         if (!user && Cookies.get('token')) {
             refetch();
         }
-    })
+    }, [user])
 
-    return isLoading ?
+    return isLoading || !data ?
         <LoadingPage/> :
         <RouterProvider router={user?.admin ? adminRouter : user ? workerRouter : nonUserRoute}/>
 }

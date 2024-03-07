@@ -10,11 +10,11 @@ import {PermissionsPage} from "../../pages/permissions/permissions";
 
 export const adminRouter = createBrowserRouter([
     {path: '/', element: <HomePage/>},
-    {path: 'home', element: <HomePage/>},
-    {path: 'login', element: <LoginPage/>},
-    {path: 'signup', element: <SignUp/>},
-    {path: 'profile', element: <ProfilePage/>},
-    {path: 'workers', element: <WorkersPage/>},
-    {path: 'admin', element: <AdminPage/>},
-    {path: 'permissions', element: <PermissionsPage/>},
+    {path: '/home', element: <HomePage/>},
+    {path: '/login', element: <LoginPage/>},
+    {path: '/signup', element: <SignUp/>},
+    {path: '/profile', element: <ProfilePage/>},
+    {path: '/workers', element: <WorkersPage/>},
+    {path: '/admin', element: <AdminPage/>},
+    {path: '/permissions', element: <PermissionsPage/>},
 ]);
