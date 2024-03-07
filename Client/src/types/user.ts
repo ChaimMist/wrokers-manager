@@ -7,4 +7,7 @@ export interface User extends Credentials {
     admin?: boolean;
     image?: string;
     token?: string;
+    address?: string;
+    job?: string;
+    phone?: string;
 }

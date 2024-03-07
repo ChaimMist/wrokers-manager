@@ -14,24 +14,23 @@ export class DBAccess {
         await DBAccess.client.connect();
     }
 
-    static async selectOne(collection: string, query: any): Promise<any> {
+    static async selectOne(collection: string, query: Object, filter?: Object): Promise<any> {
         return await DBAccess.client.db('WorkerForce').collection(collection).findOne(query);
     }
 
-    static async selectMany(collection: string, query: any): Promise<any[]> {
+    static async selectMany(collection: string, query: Object, filter?: Object): Promise<any[]> {
         return await DBAccess.client.db('WorkerForce').collection(collection).find(query).toArray();
     }
 
-    static async upsert(collection: string, query: any, update: any): Promise<UpdateResult> {
-        return await DBAccess.client.db('WorkerForce').collection(collection).updateOne(query, update
-            , {upsert: true});
+    static async update(collection: string, query: any, update: any, filter?: Object): Promise<UpdateResult> {
+        return await DBAccess.client.db('WorkerForce').collection(collection).updateOne(query, update);
     }
 
-    static async insertOne(collection: string, query: any): Promise<any> {
+    static async insertOne(collection: string, query: Object): Promise<any> {
         return await DBAccess.client.db('WorkerForce').collection(collection).insertOne(query);
     }
 
-    static async deleteOne(collection: string, query: any): Promise<any> {
+    static async deleteOne(collection: string, query: Object, filter?: Object): Promise<any> {
         return await DBAccess.client.db('WorkerForce').collection(collection).deleteOne(query);
     }
 }

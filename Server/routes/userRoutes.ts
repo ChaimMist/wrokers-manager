@@ -5,13 +5,12 @@ import {Controller} from "../controller/controller";
 
 export const getUserRouter = (): Router => {
     const router: Router = express.Router();
-    router.get('/users', BusinessLogic.getUsers);
+    router.get('/users', Controller.users);
     router.get('/user', Controller.user);
-    router.get('/getUserById', BusinessLogic.getUserById);
-    router.post('/signUp', BusinessLogic.insertUser);
-    router.post('/signIn', BusinessLogic.signIn);
-    router.post('/updateUser', BusinessLogic.updateUser);
-    router.post('/deleteUser', BusinessLogic.deleteUser);
+    router.post('/signUp', Controller.signUp);
+    router.post('/signIn', Controller.signIn);
+    router.post('/updateUser', Controller.updateUser);
+    router.delete('/deleteUser', Controller.deleteUser);
     return router;
 }
 

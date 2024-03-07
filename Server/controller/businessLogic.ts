@@ -1,7 +1,5 @@
 import Joi from "joi";
 import {DBAccess} from "../services/DbAccess/dbAccess";
-import {ObjectId, UpdateResult} from "mongodb";
-import {Request, Response} from "express";
 import {Credentials} from "../types/credentials";
 import {User} from "../types/user";
 import {credentialsSchema, userSchemas} from "../schemas/userSchemas";
@@ -19,12 +17,19 @@ export class BusinessLogic {
         return message;
     }
 
-    static async getUsers(req: Request, res: Response): Promise<void> {
-        try {
-            const users: User[] = await DBAccess.selectMany('Users', {});
-            res.status(200).send(users);
-        } catch (e: any) {
-            res.status(500).send(e.message);
+    static async getUsers(token: string): Promise<User[]> {
+        const user: User = await BusinessLogic.getUser(token);
+        if (user.admin) {
+            return await DBAccess.selectMany('Users', {});
+        } else {
+            return await DBAccess.selectMany('Users', {}, {
+                projection: {
+                    password: false,
+                    token: false,
+                    admin: false,
+                    _id: false
+                }
+            })
         }
     }
 
@@ -44,82 +49,63 @@ export class BusinessLogic {
         }
     }
 
-    static async getUserById(req: Request, res: Response): Promise<void> {
-        const userId: string = req.params.userId;
-        try {
-            return await DBAccess.selectOne('Users', {_id: new ObjectId(userId)});
-        } catch (e) {
-            console.error(e);
-            throw e;
+    static async updateUser(userId: string, user: User, token: string): Promise<boolean> {
+        if (!Auth.isAdmin(token)) {
+            throw {status: 401, message: 'Unauthorized'};
         }
-    }
-
-    static async updateUser(req: Request, res: Response): Promise<void> {
-        const userId: string = req.body.id;
-        const user: User = req.body.user;
         try {
-            const upsertInfo: UpdateResult = await DBAccess.upsert('Users', {_id: new ObjectId(userId)}, {$set: user});
-            res.status(200).send(`User id: ${upsertInfo.upsertedId} updated successfully`);
+            return (await DBAccess.update('Users', {_id: userId}, {$set: user})).acknowledged;
         } catch (e: any) {
-            res.status(500).send(e.message);
+            throw {status: 500, message: e.message};
         }
     }
 
-    static async signIn(req: Request, res: Response): Promise<void> {
-        const credentials: Credentials = req.body.credentials;
+    static async signIn(credentials: Credentials): Promise<User> {
         const validation: Joi.ValidationResult = credentialsSchema.validate(credentials);
         if (validation.error) {
-            res.status(442).send(validation.error.message);
-            return;
+            throw {status: 442, message: validation.error.message}
         }
-        try {
-            const user: User = await DBAccess.selectOne('Users', {
-                email: credentials.email,
-                password: credentials.password
-            });
-            if (user) {
-                user.token = Auth.createToken(user);
-                res.status(200).send(user);
-            } else {
-                res.status(401).send('email or password is incorrect');
-            }
-        } catch (e: any) {
-            res.status(500).send(e.message);
+        const user: User = await DBAccess.selectOne('Users', {
+            email: credentials.email,
+            password: credentials.password
+        });
+        if (user) {
+            user.token = Auth.createToken(user);
+            return user;
+        } else {
+            throw {status: 401, message: 'Email or password incorrect'}
         }
     }
 
-    static async insertUser(req: Request, res: Response): Promise<void> {
-        const user: User = req.body.user;
+    static async insertUser(user: User): Promise<void> {
         const validation: Joi.ValidationResult = userSchemas.validate(user);
         if (validation.error) {
-            res.status(442).send(validation.error.message);
-            return;
+            throw {status: 442, message: validation.error.message}
         }
         try {
             await DBAccess.insertOne('Users', {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                password: user.password
+                password: user.password,
+                phone: user.phone,
+                address: user.address,
+                job: user.job,
+                image: user.image,
             });
-            res.status(200).send('User created successfully');
         } catch (e: any) {
-            res.status(500).send(BusinessLogic.translateError(e.message));
+            throw {status: 500, message: BusinessLogic.translateError(e.message)};
         }
     }
 
-    static async deleteUser(req: Request, res: Response): Promise<void> {
-        const userId: string = req.body.data;
-        const token: string = req.body.token;
+    static async deleteUser(token: string, userId: string): Promise<void> {
         if (!Auth.isAdmin(token)) {
-            res.status(401).send('Unauthorized');
-            return;
+            throw {status: 401, message: 'Unauthorized'};
         }
         try {
-            await DBAccess.deleteOne('Users', {_id: new ObjectId(userId)});
+            await DBAccess.deleteOne('Users', {_id: userId});
         } catch (e: any) {
-            res.status(500).send(e.message);
+            throw {status: 500, message: e.message};
         }
     }
-
 }
