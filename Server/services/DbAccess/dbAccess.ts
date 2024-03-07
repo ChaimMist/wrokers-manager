@@ -34,5 +34,4 @@ export class DBAccess {
     static async deleteOne(collection: string, query: any): Promise<any> {
         return await DBAccess.client.db('WorkerForce').collection(collection).deleteOne(query);
     }
-
 }

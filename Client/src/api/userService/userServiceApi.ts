@@ -18,7 +18,7 @@ export const signIn = async (credentials: Credentials): Promise<User> => {
 export const getUser = async (): Promise<User | undefined> => {
     const token: string | undefined = Cookies.get('token');
     if (!token) return;
-    const response: AxiosResponse = await axiosInstance.get('/getUser', {headers: {token}});
+    const response: AxiosResponse = await axiosInstance.get('/user', {headers: {token}});
     return response.data;
 }
 

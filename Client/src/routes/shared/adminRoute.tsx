@@ -9,7 +9,6 @@ import {PermissionsPage} from "../../pages/permissions/permissions";
 
 
 export const adminRouter = createBrowserRouter([
-    {path: '/', element: <HomePage/>},
     {path: '/home', element: <HomePage/>},
     {path: '/login', element: <LoginPage/>},
     {path: '/signup', element: <SignUp/>},
@@ -17,4 +16,5 @@ export const adminRouter = createBrowserRouter([
     {path: '/workers', element: <WorkersPage/>},
     {path: '/admin', element: <AdminPage/>},
     {path: '/permissions', element: <PermissionsPage/>},
+    {path: '/', element: <HomePage/>},
 ]);

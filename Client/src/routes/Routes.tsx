@@ -4,10 +4,12 @@ import {UserContextTypes} from "../types/userContextTypes";
 import {useGetUser} from "../hooks/useGetUser";
 import {LoadingPage} from "../pages/loadingPage/loadingPage";
 import {RouterProvider} from "react-router-dom";
+import {ErrorPage} from "../pages/error/errorPage";
 import {adminRouter} from "./shared/adminRoute";
 import {workerRouter} from "./shared/workerRoute";
 import {nonUserRoute} from "./shared/nonUserRoute";
 import Cookies from "js-cookie";
+
 
 
 export const Routes = () => {
@@ -18,9 +20,11 @@ export const Routes = () => {
         if (!user && Cookies.get('token')) {
             refetch();
         }
-    }, [user])
+    }, [refetch, user])
 
     return isLoading || !data ?
         <LoadingPage/> :
-        <RouterProvider router={user?.admin ? adminRouter : user ? workerRouter : nonUserRoute}/>
+        isError ?
+            <ErrorPage error={error}/> :
+            <RouterProvider router={user?.admin ? adminRouter : user ? workerRouter : nonUserRoute}/>
 }

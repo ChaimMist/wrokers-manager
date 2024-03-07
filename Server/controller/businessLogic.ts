@@ -6,9 +6,11 @@ import {Credentials} from "../types/credentials";
 import {User} from "../types/user";
 import {credentialsSchema, userSchemas} from "../schemas/userSchemas";
 import {Auth} from "../services/auth/auth";
+import jwt from "jsonwebtoken";
 
 
 export class BusinessLogic {
+    static privateKey: string = process.env.JWT_SECRET as string;
 
     static translateError(message: string): string {
         if (message.includes('email_1 dup key')) {
@@ -26,14 +28,19 @@ export class BusinessLogic {
         }
     }
 
-    static async getUser(req: Request, res: Response): Promise<void> {
-        const token: string = req.headers.token as string;
-        try {
-            const decoded: any = Auth.decodeToken(token);
-            const users: User[] = await DBAccess.selectOne('Users', {});
-            res.status(200).send(users);
-        } catch (e: any) {
-            res.status(500).send(e.message);
+    static async getUser(token: string): Promise<User> {
+        const decoded: any = jwt.verify(token, BusinessLogic.privateKey);
+        if (!decoded) {
+            throw {status: 401, message: 'Unauthorized'};
+        }
+        const user: User = await DBAccess.selectOne('Users', {
+            email: decoded.user.email,
+            password: decoded.user.password
+        });
+        if (user) {
+            return user
+        } else {
+            throw {status: 404, message: 'User not found'};
         }
     }
 
@@ -106,13 +113,12 @@ export class BusinessLogic {
         const token: string = req.body.token;
         if (!Auth.isAdmin(token)) {
             res.status(401).send('Unauthorized');
-            return
+            return;
         }
         try {
             await DBAccess.deleteOne('Users', {_id: new ObjectId(userId)});
-        } catch (e) {
-            console.error(e);
-            throw e;
+        } catch (e: any) {
+            res.status(500).send(e.message);
         }
     }
 
