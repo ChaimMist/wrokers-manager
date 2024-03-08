@@ -49,12 +49,13 @@ export class BusinessLogic {
         }
     }
 
-    static async updateUser(userId: string, user: User, token: string): Promise<boolean> {
+    static async updateUser( user: User, token: string): Promise<boolean> {
+        console.log(user)
         if (!Auth.isAdmin(token)) {
             throw {status: 401, message: 'Unauthorized'};
         }
         try {
-            return (await DBAccess.update('Users', {_id: userId}, {$set: user})).acknowledged;
+            return (await DBAccess.update('Users', {email: user.email}, {$set: user})).acknowledged;
         } catch (e: any) {
             throw {status: 500, message: e.message};
         }

@@ -57,12 +57,11 @@ export class Controller {
     }
 
     static async updateUser(req: Request, res: Response): Promise<void> {
-        const userId: string = req.body.id;
-        const user: User = req.body.user;
+        const user: User = req.body;
         const token: string = req.headers.token as string;
         try {
-            await BusinessLogic.updateUser(userId, user, token);
-            res.status(200).send(`User id: ${userId} updated successfully`);
+            await BusinessLogic.updateUser(user, token);
+            res.status(200).send(`User id: ${user._id} updated successfully`);
         } catch (e: any) {
             res.status(500).send(e.message);
         }

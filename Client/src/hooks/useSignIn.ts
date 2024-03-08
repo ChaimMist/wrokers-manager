@@ -12,14 +12,14 @@ import Cookies from "js-cookie";
 
 export const useSignIn = () => {
     const navigate: NavigateFunction = useNavigate();
-    const {dispatch} = useContext(UserContext) as UserContextTypes;
+    const {setUser} = useContext(UserContext) as UserContextTypes;
     return useMutation((credentials: Credentials) => signIn(credentials), {
         onSuccess: (res: User): void => {
             if (!res.token) return;
             snackBarSuccess('Login successful');
-            dispatch({type: 'UPDATE_USER', payload: res});
+            setUser(res);
             Cookies.set('token', res.token);
-            navigate('/home');
+            navigate('/profile');
         },
         onError: (error: AxiosError) => snackBarError(error?.response?.data as string)
     });

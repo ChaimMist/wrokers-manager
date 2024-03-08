@@ -9,8 +9,8 @@ export const getUserRouter = (): Router => {
     router.get('/user', Controller.user);
     router.post('/signUp', Controller.signUp);
     router.post('/signIn', Controller.signIn);
-    router.post('/updateUser', Controller.updateUser);
-    router.delete('/deleteUser', Controller.deleteUser);
+    router.put('/update', Controller.updateUser);
+    router.delete('/delete', Controller.deleteUser);
     return router;
 }
 

@@ -13,16 +13,16 @@ import Cookies from "js-cookie";
 
 
 export const Routes = () => {
-    const {user, dispatch} = useContext(UserContext) as UserContextTypes;
-    const {data, error, isLoading, isError, refetch} = useGetUser();
+    const {user} = useContext(UserContext) as UserContextTypes;
+    const {error, isLoading, isError, refetch} = useGetUser();
 
-    useEffect(() => {
+    useEffect((): void => {
         if (!user && Cookies.get('token')) {
             refetch();
         }
     }, [refetch, user])
 
-    return isLoading || !data ?
+    return (isLoading) ?
         <LoadingPage/> :
         isError ?
             <ErrorPage error={error}/> :

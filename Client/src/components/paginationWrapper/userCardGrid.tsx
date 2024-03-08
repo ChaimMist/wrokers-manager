@@ -3,8 +3,12 @@ import * as React from "react";
 import {UserCard} from "../userCard/userCard";
 import Grid from "@mui/material/Grid";
 import {User} from "../../types/user";
+import {useContext} from "react";
+import {UserContext} from "../../contexts/userContext/userContext";
+import {UserContextTypes} from "../../types/userContextTypes";
 
 export const UserCardGrid = (props: UserCardGridProps) => {
+    const {user} = useContext(UserContext) as UserContextTypes;
     let childrenToRender: User[] = props.users;
     if (props.pagination) {
         if (props.page == undefined || props.pageSize == undefined) {
@@ -17,10 +21,10 @@ export const UserCardGrid = (props: UserCardGridProps) => {
               sx={{justifyContent: 'center', marginTop: '10px'}}
               rowSpacing={3}
               columnSpacing={2}>
-            {childrenToRender.map((user: User, index:number) => {
+            {childrenToRender.map((cardUser: User, index:number) => {
                 return (
                     <Grid item key={index}>
-                        <UserCard user={user}/>
+                        <UserCard user={cardUser} editable={user?.admin}/>
                     </Grid>
                 )
             })
