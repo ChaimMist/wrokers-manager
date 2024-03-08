@@ -14,12 +14,10 @@ export const BaseLayout = ({children}: BaseLayoutProps) => {
     const {user} = useContext(UserContext) as UserContextTypes;
 
     const userPages: Page[] = [
-        {title: 'Home', link: '/home'},
         {title: 'Profile', link: '/profile'},
         {title: 'Workers', link: '/workers'}]
 
     const adminPages: Page[] = [
-        {title: 'Admin', link: '/admin'},
         {title: 'Permissions', link: '/permissions'}]
 
 
@@ -27,7 +25,7 @@ export const BaseLayout = ({children}: BaseLayoutProps) => {
     const pages:Page[] = user ? user.admin ? userPages.concat(adminPages) : userPages : [];
 
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh', justifyContent: 'space-between'}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh', justifyContent: 'space-between', backgroundColor: theme.palette.background.default}}>
             <Box>
                 <NavBar pages={pages}/>
                 {children}

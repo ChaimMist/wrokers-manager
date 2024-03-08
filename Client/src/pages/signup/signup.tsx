@@ -28,6 +28,10 @@ export const SignUp = () => {
             lastName: formData.get('lastName') as string,
             email: formData.get('email') as string,
             password: formData.get('password') as string,
+            job: formData.get('Job Title') as string,
+            address: formData.get('Address') as string,
+            phone: formData.get('Phone Number') as string,
+            image: formData.get('Image Url') as string,
         };
         mutate(user);
     };
@@ -76,6 +80,17 @@ export const SignUp = () => {
                                 <TextField
                                     required
                                     fullWidth
+                                    id="Job Title"
+                                    label="Job Title"
+                                    name="Job Title"
+                                    autoComplete="Job Title"
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
@@ -91,6 +106,37 @@ export const SignUp = () => {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="Image Url"
+                                    label="Image Url"
+                                    type="Image Url"
+                                    id="Image Url"
+                                    autoComplete="Image Url"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="Address"
+                                    label="Address"
+                                    name="Address"
+                                    autoComplete="Address"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="Phone Number"
+                                    label="Phone Number"
+                                    name="Phone Number"
+                                    autoComplete="Phone Number"
                                 />
                             </Grid>
                         </Grid>

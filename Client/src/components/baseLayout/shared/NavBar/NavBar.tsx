@@ -25,7 +25,7 @@ import {NavBarProps} from "./types";
 export const NavBar = ({pages}: NavBarProps) => {
     const navigation: NavigateFunction = useNavigate();
     const {setTheme} = useContext(ThemeContext);
-    const {dispatch} = useContext(UserContext) as UserContextTypes;
+    const {user, setUser} = useContext(UserContext) as UserContextTypes;
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [anchorElTheme, setAnchorElTheme] = useState<null | HTMLElement>(null);
@@ -34,7 +34,7 @@ export const NavBar = ({pages}: NavBarProps) => {
         navigation(link);
     };
     const handleLogOut = () => (): void => {
-        dispatch({type: 'UPDATE_USER', payload: null});
+        setUser(null);
         navigation('/login');
     }
     const handleOpenNavMenu = (event: MouseEvent<HTMLElement>): void => {
@@ -96,7 +96,7 @@ export const NavBar = ({pages}: NavBarProps) => {
                     <Box className={'d-flex flex-row'}>
                         <Tooltip title="Open settings">
                             <IconButton size={'large'} sx={{p: 0}} onClick={handleOpenUserMenu}>
-                                <Avatar alt={'avatar'}/>
+                                <Avatar src={user?.image} alt={'avatar'}/>
                             </IconButton>
                         </Tooltip>
                         <CustomMenu anchorEl={anchorElUser} setAnchorEl={setAnchorElUser}>

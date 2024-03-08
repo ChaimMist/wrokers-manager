@@ -7,13 +7,13 @@ import {User} from "../types/user";
 
 
 export const useGetUser = () => {
-    const {dispatch} = useContext(UserContext) as UserContextTypes;
+    const {setUser} = useContext(UserContext) as UserContextTypes;
     return useQuery('getUser', () => {
         return getUser();
     }, {
         enabled: false,
         onSuccess: (res: User): void => {
-            dispatch({type: 'UPDATE_USER', payload: res});
+            setUser(res);
         }
     });
 }

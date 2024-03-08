@@ -1,13 +1,13 @@
-import {Context, createContext, FC, ReactNode, useReducer} from "react";
+import {Context, createContext, FC, ReactNode, useState} from "react";
 import {UserContextTypes} from "../../types/userContextTypes";
-import {userReducer} from "./userReducer";
+import {User} from "../../types/user";
 
 export const UserContext: Context<UserContextTypes | null> = createContext<UserContextTypes | null>(null)
 const UserProvider: FC<{ children: ReactNode }> = ({children}) => {
-    const [user, dispatch] = useReducer(userReducer, null);
+    const [user, setUser] = useState(null as User | null);
 
     return (
-        <UserContext.Provider value={{user, dispatch}}>
+        <UserContext.Provider value={{user, setUser}}>
             {children}
         </UserContext.Provider>
     )

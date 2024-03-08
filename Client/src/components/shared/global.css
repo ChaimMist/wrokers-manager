@@ -106,6 +106,9 @@
 .rounded-2 {
     border-radius: 0.5rem;
 }
+.shadow-hover:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
 
 .image {
     width: 100%;
